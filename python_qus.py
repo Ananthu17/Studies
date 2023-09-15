@@ -218,16 +218,22 @@ class ParentClass:
 
 
 """
-4. Diffrence between __new__ and __init__ method?
+4. Diffrence between __new__ and __init__ method and __call__ method ?
 
     __new__ is a special method that is responsible
     for creating a new instance of a class.
+
+    The primary purpose of __new__ is to allocate memory
+    for a new instance
 
     It is called before __init__ and is responsible
     for the creation and initialization of the object.
 
     used when we need to customize object creation,
     such as creating a singleton or immutable object
+
+    __call__: special method called __call__, which allows
+    instances of the class to be called like functions.
 """
 
 
@@ -240,8 +246,12 @@ class MyClass:
         print("Initializing the object")
         self.name = name
 
+    def __call__(self, x):
+        return self.name * x
+
 
 # my_object = MyClass("John Doe")
+# print(my_object(2))
 
 """
 6. List vs Tuples Comparison with memory ?
@@ -269,6 +279,90 @@ def generator(data):
         yield item
 
 gen = generator([1, 2, 3, 4, 5, 6, "ananthu", "reshmi", [5 , 8, 0]])
-print(sys.getsizeof(gen))
+# print(sys.getsizeof(gen))
 
-print("Memory usage of an empty list:"+str(size)+"bytes")
+# print("Memory usage of an empty list:"+str(size)+"bytes")
+
+"""
+7. Decorators in Python ?
+
+   In Python, decorators are a powerful and flexible
+   way to modify or enhance the behavior of functions
+   or methods without changing their source code.
+   it allows us to add additional functionality to
+   functions or methods
+
+"""
+
+
+def simple_dec(func):
+    def wrapper():
+        print("code before func")
+        func()
+        print("code after func")
+    return wrapper
+
+
+class Mydec:
+    def __init__(self, func):
+        self.func = func
+
+    def __call__(self, *args, **kwargs):
+        print("Decorator setup")
+        result = self.func(*args, **kwargs)
+        print("Decorator teardown")
+        return result
+
+
+@Mydec
+def print_name():
+    print("main code")
+
+
+print_name()
+
+"""
+8 Multiprocessing vs Multithreading ?
+
+    Multiprocessing and multithreading are two different
+    approaches to achieving concurrent execution in
+    computer programs.
+
+    Multiprocessing : Multiprocessing involves running multiple
+                      separate processes, each with its own memory space.
+
+                      These processes can run on different CPU cores
+                      or even on different physical processors if available
+
+                      beneficial for CPU-bound tasks, such as heavy
+                      computational workloads
+
+                      Multiprocessing has more overhead than multithreading
+                      due to the need to create and manage separate processes
+
+    Multithreading : Multithreading involves running multiple threads within
+                     a single process, and they share the same memory space.
+                     Threads are lighter-weight than processes
+
+                     threads can execute tasks simultaneously,
+                     but not necessarily in parallel.
+
+                     A thread is basically an "independent flow of execution".
+                     A single process can consist of multiple threads.
+
+                     In Python, consider multiprocessing for CPU-bound tasks
+                     due to the GIL, and multithreading for I/O-bound tasks.
+"""
+
+import multiprocessing
+
+
+def calculate_square(number):
+    result = number * number
+
+if __name__ == "__main__":
+    numbers = [1, 2, 3, 4, 5]
+
+    # Create a multiprocessing Pool with 2 processes
+with multiprocessing.Pool(processes=2) as pool:
+    pool.map(calculate_square, numbers)
